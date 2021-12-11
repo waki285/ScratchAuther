@@ -17,4 +17,19 @@ client.on("messageCreate", (message) => {
       .setLabel("認証");
     message.channel.send({ embeds: [embed], components: [new MessageActionRow().addComponents(button)] });
   }
+});
+
+client.on("interactionCreate", (i) => {
+  if (!i.isButton()) return;
+  if (i.customId === "verify") {
+    await i.deferReply();
+    i.author.send("あなたのScratchユーザー名を送信してください。")
+    .then(async (msg) => {
+      const collector = msg.channel.createMessageCollector({ filter: (m) => m.author.id === i.user.id });
+
+    })
+    .catch(e => {
+      if (e.toString().includes("to this user")) return i.followUp("DMの送信ができません。DM設定を変更してください。");
+    })
+  }
 })
