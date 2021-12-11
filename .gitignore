@@ -1,0 +1,11 @@
+.ssh
+c.js
+i.sh
+*.pub
+node_modules
+.upm
+.npm
+.env
+.cache
+.git
+.replit
