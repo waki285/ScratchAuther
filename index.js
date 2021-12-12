@@ -1,6 +1,6 @@
-const { Client, Intents, Permissions, MessageButton, MessageEmbed, MessageActionRow } = require("discord.js");
+const { Client, Intents, Permissions, MessageButton, MessageEmbed, MessageActionRow, MessageCollector } = require("discord.js");
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.DIRECT_MESSAGES], partials: ["CHANNEL", "GUILD_MEMBER", "MESSAGE", "REACTION", "USER"], restTimeOffset: 50 });
-const { default:axios } = require("axios");
+const { default: axios } = require("axios");
 const { randomBytes } = require("crypto");
 
 client.on("ready", () => console.log(`Logged in as ${client.user.tag}.`));
@@ -24,12 +24,41 @@ client.on("interactionCreate", (i) => {
   if (i.customId === "verify") {
     await i.deferReply();
     i.author.send("あなたのScratchユーザー名を送信してください。")
-    .then(async (msg) => {
-      const collector = msg.channel.createMessageCollector({ filter: (m) => m.author.id === i.user.id });
-
-    })
-    .catch(e => {
-      if (e.toString().includes("to this user")) return i.followUp("DMの送信ができません。DM設定を変更してください。");
-    })
+      .then(async (msg) => {
+        /**
+         * 
+         * @type {MessageCollector}
+         */
+        const collector = msg.channel.createMessageCollector({ filter: (m) => m.author.id === i.user.id });
+        let scratchName = "";
+        let uuid = "";
+        collector.on("collect", async (m) => {
+          const am = await m.channel.send("ユーザー名を確認中です。");
+          axios({
+            url: `https://api.scratch.mit.edu/users/${encodeURIComponent(m.cleanContent)}`,
+            responseType: "json",
+            method: "get"
+          })
+            .then(() => {
+              scratchName = m.cleanContent;
+              const but = new MessageButton()
+                .setCustomId("auth")
+                .setStyle("SUCCESS")
+                .setLabel("「私について」に貼りました")
+                .setDisabled(true);
+              uuid = `${randomBytes(4).toString("hex")}-${randomBytes(2).toString("hex")}-${randomBytes(2).toString("hex")}-${randomBytes(2).toString("hex")}-${randomBytes(6).toString("hex")}`;
+              return am.edit({ content: "ユーザー名の確認ができました。\n次に、下のコード\n(`XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX`形式)\nを、あなたのScratchプロフィールの、**私について**のどこかに貼り付けてください。\n貼り付けてから1分くらい経過したら、下のボタンが押せるようになっているので、押してください。", embeds: [{
+                description: `\`\`\`\n${uuid}\n\`\`\``
+              }], components: [new MessageActionRow().addComponents(but)] });
+              setTimeout(() => am.edit({}), 1000 * 60)
+            })
+            .catch(() => {
+              return am.edit("Scratchユーザーが存在しません。");
+            })
+        })
+      })
+      .catch(e => {
+        if (e.toString().includes("to this user")) return i.followUp("DMの送信ができません。DM設定を変更してください。");
+      })
   }
 })
