@@ -50,7 +50,7 @@ client.on("interactionCreate", (i) => {
               return am.edit({ content: "ユーザー名の確認ができました。\n次に、下のコード\n(`XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX`形式)\nを、あなたのScratchプロフィールの、**私について**のどこかに貼り付けてください。\n貼り付けてから1分くらい経過したら、下のボタンが押せるようになっているので、押してください。", embeds: [{
                 description: `\`\`\`\n${uuid}\n\`\`\``
               }], components: [new MessageActionRow().addComponents(but)] });
-              setTimeout(() => am.edit({}), 1000 * 60)
+              setTimeout(() => am.edit({ components: [new MessageActionRow().addComponents(am.components[0].components[0].setDisabled(false))]}), 1000 * 60)
             })
             .catch(() => {
               return am.edit("Scratchユーザーが存在しません。");
