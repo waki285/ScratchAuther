@@ -23,9 +23,10 @@ client.on("messageCreate", (message) => {
 client.on("interactionCreate", async (i) => {
   if (!i.isButton()) return;
   if (i.customId === "verify") {
-    await i.deferReply();
+    await i.deferReply({ ephemeral: true });
     i.member.send("あなたのScratchユーザー名を送信してください。")
       .then(async (msg) => {
+        await i.followUp("DMを確認してください。")
         /**
          * 
          * @type {MessageCollector}
