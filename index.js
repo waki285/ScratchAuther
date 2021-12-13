@@ -73,7 +73,7 @@ client.on("interactionCreate", async (i) => {
           collector.on("collect", async (mci) => {
             await mci.deferReply();
             const { data } = await axios({
-              url: `https://api.scratch.mit.edu/users/${scratchName}`,
+              url: `https://api.scratch.mit.edu/users/${scratchName}?timestamp=${new Date().getTime()}`,
               responseType: "json",
               method: "get"
             });
