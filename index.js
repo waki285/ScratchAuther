@@ -89,4 +89,6 @@ client.on("interactionCreate", (i) => {
         if (e.toString().includes("to this user")) return i.followUp("DMの送信ができません。DM設定を変更してください。");
       })
   }
-})
+});
+
+client.login(process.env.BOT_TOKEN);
