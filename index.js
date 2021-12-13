@@ -71,11 +71,11 @@ client.on("interactionCreate", async (i) => {
           collector.on("collect", async (mci) => {
             await mci.deferReply();
             const { data } = await axios({
-              url: `https://api.scratch.mit.edu/users/${encodeURIComponent(scratchName)}`,
+              url: `https://api.scratch.mit.edu/users/${scratchName}`,
               responseType: "json",
               method: "get"
             });
-            if (data.bio.includes(uuid)) {
+            if (data.profile.bio.includes(uuid)) {
               mci.followUp("認証が完了しました！");
               for (const role of config.verifiedRoles) {
                 i.member.roles.add(role);
