@@ -24,7 +24,7 @@ client.on("interactionCreate", async (i) => {
   if (!i.isButton()) return;
   if (i.customId === "verify") {
     await i.deferReply();
-    i.author.send("あなたのScratchユーザー名を送信してください。")
+    i.member.send("あなたのScratchユーザー名を送信してください。")
       .then(async (msg) => {
         /**
          * 
