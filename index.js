@@ -20,7 +20,7 @@ client.on("messageCreate", (message) => {
   }
 });
 
-client.on("interactionCreate", (i) => {
+client.on("interactionCreate", async (i) => {
   if (!i.isButton()) return;
   if (i.customId === "verify") {
     await i.deferReply();
