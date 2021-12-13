@@ -50,7 +50,7 @@ client.on("interactionCreate", async (i) => {
                 .setStyle("SUCCESS")
                 .setLabel("「私について」に貼りました");
               uuid = `${randomBytes(4).toString("hex")}-${randomBytes(2).toString("hex")}-${randomBytes(2).toString("hex")}-${randomBytes(2).toString("hex")}-${randomBytes(6).toString("hex")}`;
-              am.edit({ content: "ユーザー名の確認ができました。\n次に、下のコード\n(`XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX`形式)\nを、あなたのScratchプロフィールの、**私について**のどこかに貼り付けてください。\n貼り付けてから1分くらい経過したら、下のボタンが押せるようになっているので、押してください。", embeds: [{
+              am.edit({ content: "ユーザー名の確認ができました。\n次に、下のコード\n(`XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX`形式)\nを、あなたのScratchプロフィールの、**私について**のどこかに貼り付けてください。\n貼り付けてから、下のボタンを押してください。", embeds: [{
                 description: `\`\`\`\n${uuid}\n\`\`\``
               }], components: [new MessageActionRow().addComponents(but)] });
               
