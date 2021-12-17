@@ -100,6 +100,10 @@ client.on("interactionCreate", async (i) => {
                   name: "DiscordID",
                   value: i.user.id
                 });
+                if (config.logging.includes("uuid")) log.push({
+                  name: "検証用ID",
+                  value: uuid
+                });
                 client.channels.cache.get(config.loggingChannel).send({
                   embeds: [{
                     title: "認証成功",
