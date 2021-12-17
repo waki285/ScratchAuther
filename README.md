@@ -8,7 +8,7 @@ ScratchアカウントとDiscordアカウントを紐つけることができま
 git clone https://github.com/waki285/ScratchAuther.git
 ```
 
-2. Edit `config.json`
+2. Edit `config.js`
 
 `verifiedRoles`の部分に認証したあとのロールの配列を指定してください。
 
