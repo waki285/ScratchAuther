@@ -2,7 +2,7 @@ const { Client, Intents, Permissions, MessageButton, MessageEmbed, MessageAction
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.DIRECT_MESSAGES], partials: ["CHANNEL", "GUILD_MEMBER", "MESSAGE", "REACTION", "USER"], restTimeOffset: 50 });
 const { default: axios } = require("axios");
 const { randomBytes } = require("crypto");
-const config = require("./config.json");
+const config = require("./config");
 
 require("dotenv").config();
 
@@ -79,6 +79,35 @@ client.on("interactionCreate", async (i) => {
               mci.followUp("認証が完了しました！");
               for (const role of config.verifiedRoles) {
                 i.member.roles.add(role);
+              };
+              if (config.loggingChannel) {
+                const log = [];
+                if (config.logging.includes("scratch.username")) log.push({
+                  name: "Scratchユーザー名",
+                  value: `[${scratchName}](https://scratch.mit.edu/users/${scratchName})`
+                });
+                if (config.logging.includes("discord.tag")) log.push({
+                  name: "Discordユーザー#タグ",
+                  value: i.user.tag
+                });
+                if (config.logging.includes("discord.username")) log.push({
+                  name: "Discordユーザー名",
+                  value: i.user.username
+                });
+                if (config.logging.includes("discord.id")) log.push({
+                  name: "DiscordID",
+                  value: i.user.id
+                });
+                if (config.logging.includes("uuid")) log.push({
+                  name: "検証用ID",
+                  value: uuid
+                });
+                client.channels.cache.get(config.loggingChannel).send({
+                  embeds: [{
+                    title: "認証成功",
+                    fields: log
+                  }]
+                })
               }
             } else {
               mci.followUp("まだキャッシュに反映されていないか、設定されていないようです...30秒後にもう一度お試しください。");
